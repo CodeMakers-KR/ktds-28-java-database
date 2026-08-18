@@ -47,14 +47,13 @@ SELECT SALARY
     OR JOB_ID != 'ST_MAN'
    AND JOB_ID != 'SA_REP'*/
  WHERE SALARY BETWEEN 2000 AND 5000
-   AND JOB_ID NOT IN ('ST_MAN', 'SA_REP')
+    OR JOB_ID NOT IN ('ST_MAN', 'SA_REP')
 ;
 -- 상사사원번호가 101번 이거나 103번인 사원 중 급여가 5000 이상인 사원의 상사사원번호와 급여를 조회한다.
 SELECT MANAGER_ID
 	 , SALARY
   FROM EMPLOYEES
- WHERE (MANAGER_ID = 101 
-    OR MANAGER_ID = 103)  
+ WHERE MANAGER_ID IN (101, 103)
    AND SALARY >= 5000
 ;
 -- 사원 번호가 108번인 사원의 사원번호, 이름, 성을 조회한다.
