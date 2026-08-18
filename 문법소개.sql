@@ -1,3 +1,62 @@
+-- 급여가 8000 이상이면서 커미션을 받는 사원의 급여, 커미션 비율을 조회한다.
+SELECT SALARY
+	 , COMMISSION_PCT
+  FROM EMPLOYEES 
+ WHERE SALARY >= 8000
+   AND COMMISSION_PCT IS NOT NULL
+;
+-- 급여가 10000 이상이거나 커미션을 받는 사원의 급여, 커미션 비율을 조회한다.
+SELECT SALARY
+	 , COMMISSION_PCT
+  FROM EMPLOYEES
+ WHERE SALARY >= 10000
+    OR COMMISSION_PCT IS NOT NULL
+;
+-- 10번, 20번, 50번 부서번호에서 근무하는 모든 사원들의 근무부서 번호, 직무 아이디를 조회한다.
+SELECT DEPARTMENT_ID
+	 , JOB_ID
+  FROM EMPLOYEES
+/*WHERE DEPARTMENT_ID = 10
+     OR DEPARTMENT_ID = 20
+     OR DEPARTMENT_ID = 50*/
+ WHERE DEPARTMENT_ID IN (10, 20, 50)
+;
+-- 급여가 5000이상 10000미만이거나 직무 아이디가 IT_PROG 인 사원의 급여와 직무아이디를 조회한다.
+SELECT SALARY
+	 , JOB_ID
+  FROM EMPLOYEES
+/* WHERE SALARY >= 5000 
+   AND SALARY < 10000
+    OR JOB_ID = 'IT_PROG'*/
+ WHERE SALARY BETWEEN 5000 AND 10000 - 1
+    OR JOB_ID = 'IT_PROG'
+;
+-- 직무아이디가 IT_PROG, FI_ACCOUNT 가 아닌 사원들의 직무 아이디를 중복없이 조회한다.
+SELECT DISTINCT JOB_ID
+  FROM EMPLOYEES
+ /*WHERE JOB_ID != 'IT_PROG'
+   AND JOB_ID != 'FI_ACCOUNT'*/
+ WHERE JOB_ID NOT IN ('IT_PROG', 'FI_ACCOUNT')
+;
+-- 급여가 2000 ~ 5000 사이 이거나 직무 아이디가 ST_MAN, SA_REP가 아닌 사원들의 급여와 직무아이디를 조회한다.
+SELECT SALARY
+	 , JOB_ID
+  FROM EMPLOYEES
+ /*WHERE SALARY >= 2000
+   AND SALARY <= 5000
+    OR JOB_ID != 'ST_MAN'
+   AND JOB_ID != 'SA_REP'*/
+ WHERE SALARY BETWEEN 2000 AND 5000
+   AND JOB_ID NOT IN ('ST_MAN', 'SA_REP')
+;
+-- 상사사원번호가 101번 이거나 103번인 사원 중 급여가 5000 이상인 사원의 상사사원번호와 급여를 조회한다.
+SELECT MANAGER_ID
+	 , SALARY
+  FROM EMPLOYEES
+ WHERE (MANAGER_ID = 101 
+    OR MANAGER_ID = 103)  
+   AND SALARY >= 5000
+;
 -- 사원 번호가 108번인 사원의 사원번호, 이름, 성을 조회한다.
 SELECT EMPLOYEE_ID
 	 , FIRST_NAME
