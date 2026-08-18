@@ -88,6 +88,22 @@ SELECT EMPLOYEE_ID
  WHERE DEPARTMENT_ID = 90
 ;
 -- 13. 90번, 100번 부서에서 근무하는 사원들의 모든 정보를 조회한다.
+SELECT EMPLOYEE_ID
+	 , FIRST_NAME
+	 , LAST_NAME
+	 , EMAIL
+	 , PHONE_NUMBER
+	 , HIRE_DATE
+	 , JOB_ID
+	 , SALARY
+	 , COMMISSION_PCT
+	 , MANAGER_ID
+	 , DEPARTMENT_ID
+  FROM EMPLOYEES
+ /*WHERE DEPARTMENT_ID = 90
+    OR DEPARTMENT_ID = 100*/
+ WHERE DEPARTMENT_ID IN (90, 100)
+;
 -- 14. 100번 상사의 직속 부하직원의 모든 정보를 조회한다.
 SELECT EMPLOYEE_ID
 	 , FIRST_NAME
@@ -149,8 +165,43 @@ SELECT EMPLOYEE_ID
  WHERE SALARY >= 7000
 ;
 -- 18. 직무 아이디가 'PU_CLERK'인 사원 중 급여가 3000 이상인 사원들의 모든 정보를 조회한다.
+SELECT EMPLOYEE_ID
+	 , FIRST_NAME
+	 , LAST_NAME
+	 , EMAIL
+	 , PHONE_NUMBER
+	 , HIRE_DATE
+	 , JOB_ID
+	 , SALARY
+	 , COMMISSION_PCT
+	 , MANAGER_ID
+	 , DEPARTMENT_ID
+  FROM EMPLOYEES
+ WHERE JOB_ID = 'PU_CLERK'
+   AND SALARY >= 3000
+;
 -- 19. 급여가 2500, 3500, 7000 이 아니며 직업이 SA_REP 이나 ST_CLERK 인 사원들의 
 --     모든 정보를 조회한다.
+SELECT EMPLOYEE_ID
+	 , FIRST_NAME
+	 , LAST_NAME
+	 , EMAIL
+	 , PHONE_NUMBER
+	 , HIRE_DATE
+	 , JOB_ID
+	 , SALARY
+	 , COMMISSION_PCT
+	 , MANAGER_ID
+	 , DEPARTMENT_ID
+  FROM EMPLOYEES
+ /*WHERE SALARY != 2500
+   AND SALARY != 3500
+   AND SALARY != 7000
+   AND (JOB_ID = 'SA_REP'
+    OR JOB_ID = 'ST_CLERK')*/
+ WHERE SALARY NOT IN (2500, 3500, 7000)
+   AND JOB_ID IN ('SA_REP', 'ST_CLERK')
+;
 -- 20. 커미션을 안받는 사원들의 모든 정보를 조회한다.
 SELECT EMPLOYEE_ID
 	 , FIRST_NAME
@@ -188,14 +239,80 @@ SELECT EMPLOYEE_ID
 -- 26. 이름이나 성에 'A' 혹은 'a' 가 포함된 사원의 모든 정보를 조회한다.
 -- 27. 국가명이 6자리인 국가의 모든 정보를 조회한다.
 -- 28. '20230222' 문자 데이터를 날짜로 변환해 조회한다.(DUAL)
--- 29. '20230222' 문자 데이터를 'YYYY-MM' 으로 변환해 조회한다.(DUAL)
+SELECT '20230222'
+	 , TO_DATE('20230222', 'YYYY-MM-DD')
+	 , TO_DATE('20230222')
+  FROM DUAL
+;
+-- 29. '20230222' 문자 데이터를 'YYYY-MM' 으로 변환해 조회한다.(DUAL) => '2023-02'
+SELECT TO_DATE('20230222', 'YYYY-MM-DD')
+	 , TO_CHAR(TO_DATE('20230222', 'YYYY-MM-DD'), 'YYYY-MM')
+  FROM DUAL
+;
 -- 30. '20230222130140' 문자 데이터를 'YYYY-MM-DD HH24:MI:SS' 으로 변환해 조회한다. (DUAL)
+SELECT '20230222130140'
+	 , TO_CHAR(TO_DATE('20230222130140', 'YYYY-MM-DD HH24:MI:SS'), 'YYYY-MM-DD HH24:MI:SS')
+  FROM DUAL
+;
 -- 31. '20230222' 날짜의 열흘 후의 날짜를 'YYYY-MM-DD' 으로 변환해 조회한다. (DUAL)
+SELECT '20230222'
+	 , TO_DATE('20230222', 'YYYY-MM-DD')
+	 , TO_DATE('20230222', 'YYYY-MM-DD') + 10
+	 , TO_CHAR(TO_DATE('20230222', 'YYYY-MM-DD') + 10, 'YYYY-MM-DD')
+  FROM DUAL
+;
 -- 32. 직원의 입사일자를 '연-월-일' 형태로 조회한다.
+SELECT TO_CHAR(HIRE_DATE, 'YYYY-MM-DD')
+  FROM EMPLOYEES
+;
 -- 33. 2005년 09월에 입사한 사원들의 모든 정보를 조회한다.
+-- WHERE COLUMN 연산자 값 
+SELECT EMPLOYEE_ID
+	 , FIRST_NAME
+	 , LAST_NAME
+	 , EMAIL
+	 , PHONE_NUMBER
+	 , HIRE_DATE
+	 , JOB_ID
+	 , SALARY
+	 , COMMISSION_PCT
+	 , MANAGER_ID
+	 , DEPARTMENT_ID
+  FROM EMPLOYEES
+-- WHERE HIRE_DATE BETWEEN TO_DATE('2005-09', 'YYYY-MM') AND TO_DATE('2005-10-01', 'YYYY-MM-DD') - 1
+  WHERE HIRE_DATE >= TO_DATE('2005-09', 'YYYY-MM')
+    AND HIRE_DATE <= TO_DATE('2005-10-01', 'YYYY-MM-DD') - 1
+;
 -- 34. 현재 시간으로부터 20년 전 보다 일찍 입사한 사원의 모든 정보를 조회한다.
+-- WHERE COLUMN 연산자 값
+SELECT EMPLOYEE_ID
+	 , FIRST_NAME
+	 , LAST_NAME
+	 , EMAIL
+	 , PHONE_NUMBER
+	 , HIRE_DATE
+	 , JOB_ID
+	 , SALARY
+	 , COMMISSION_PCT
+	 , MANAGER_ID
+	 , DEPARTMENT_ID
+  FROM EMPLOYEES
+ WHERE HIRE_DATE < ADD_MONTHS(SYSDATE, -20 * 12) 
+ ORDER BY HIRE_DATE DESC
+;
 -- 35. 사원들의 정보 중 입사연도, 이름, 성만 조회한다.
+SELECT TO_CHAR(HIRE_DATE, 'YYYY')
+	 , FIRST_NAME
+	 , LAST_NAME
+  FROM EMPLOYEES
+;
 -- 36. 사원들의 정보 중 입사연도, 입사월, 이름, 성만 조회한다.
+SELECT TO_CHAR(HIRE_DATE, 'YYYY')
+	 , TO_CHAR(HIRE_DATE, 'MM')
+	 , FIRST_NAME
+	 , LAST_NAME
+  FROM EMPLOYEES
+;
 -- 37. MOD 함수를 통해 사원번호가 홀수면 남자, 짝수면 여자 로 구분해 조회한다. MOD(값, 나눌값)
 -- 38. 사원 모든 정보 중 이메일만 모두 소문자로 변경하여 조회한다.
 -- 39. 사원의 급여를 TRUNC(소수점 버림) 함수를 사용해 100 단위는 버린채 다음과 같이 조회한다. 
