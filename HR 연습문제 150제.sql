@@ -73,16 +73,114 @@ SELECT DISTINCT MANAGER_ID
   FROM EMPLOYEES
 ;  
 -- 12. 90번 부서에서 근무하는 사원들의 모든 정보를 조회한다.
+SELECT EMPLOYEE_ID
+	 , FIRST_NAME
+	 , LAST_NAME
+	 , EMAIL
+	 , PHONE_NUMBER
+	 , HIRE_DATE
+	 , JOB_ID
+	 , SALARY
+	 , COMMISSION_PCT
+	 , MANAGER_ID
+	 , DEPARTMENT_ID
+  FROM EMPLOYEES
+ WHERE DEPARTMENT_ID = 90
+;
 -- 13. 90번, 100번 부서에서 근무하는 사원들의 모든 정보를 조회한다.
 -- 14. 100번 상사의 직속 부하직원의 모든 정보를 조회한다.
+SELECT EMPLOYEE_ID
+	 , FIRST_NAME
+	 , LAST_NAME
+	 , EMAIL
+	 , PHONE_NUMBER
+	 , HIRE_DATE
+	 , JOB_ID
+	 , SALARY
+	 , COMMISSION_PCT
+	 , MANAGER_ID
+	 , DEPARTMENT_ID
+  FROM EMPLOYEES
+ WHERE MANAGER_ID = 100
+;
 -- 15. 111번 사원의 모든 정보를 조회한다.
+SELECT EMPLOYEE_ID
+	 , FIRST_NAME
+	 , LAST_NAME
+	 , EMAIL
+	 , PHONE_NUMBER
+	 , HIRE_DATE
+	 , JOB_ID
+	 , SALARY
+	 , COMMISSION_PCT
+	 , MANAGER_ID
+	 , DEPARTMENT_ID
+  FROM EMPLOYEES
+ WHERE EMPLOYEE_ID = 111
+;
 -- 16. 직무 아이디가 AD_VP 인 사원의 모든 정보를 조회한다.
+SELECT EMPLOYEE_ID
+	 , FIRST_NAME
+	 , LAST_NAME
+	 , EMAIL
+	 , PHONE_NUMBER
+	 , HIRE_DATE
+	 , JOB_ID
+	 , SALARY
+	 , COMMISSION_PCT
+	 , MANAGER_ID
+	 , DEPARTMENT_ID
+  FROM EMPLOYEES
+ WHERE JOB_ID = 'AD_VP'
+;
 -- 17. 급여가 7000 이상인 사원의 모든 정보를 조회한다.
+SELECT EMPLOYEE_ID
+	 , FIRST_NAME
+	 , LAST_NAME
+	 , EMAIL
+	 , PHONE_NUMBER
+	 , HIRE_DATE
+	 , JOB_ID
+	 , SALARY
+	 , COMMISSION_PCT
+	 , MANAGER_ID
+	 , DEPARTMENT_ID
+  FROM EMPLOYEES
+ WHERE SALARY >= 7000
+;
 -- 18. 직무 아이디가 'PU_CLERK'인 사원 중 급여가 3000 이상인 사원들의 모든 정보를 조회한다.
 -- 19. 급여가 2500, 3500, 7000 이 아니며 직업이 SA_REP 이나 ST_CLERK 인 사원들의 
 --     모든 정보를 조회한다.
 -- 20. 커미션을 안받는 사원들의 모든 정보를 조회한다.
+SELECT EMPLOYEE_ID
+	 , FIRST_NAME
+	 , LAST_NAME
+	 , EMAIL
+	 , PHONE_NUMBER
+	 , HIRE_DATE
+	 , JOB_ID
+	 , SALARY
+	 , COMMISSION_PCT
+	 , MANAGER_ID
+	 , DEPARTMENT_ID
+  FROM EMPLOYEES
+ WHERE COMMISSION_PCT IS NULL
+;
 -- 21. 커미션을 받는 사원들의 모든 정보를 조회한다.
+SELECT EMPLOYEE_ID
+	 , FIRST_NAME
+	 , LAST_NAME
+	 , EMAIL
+	 , PHONE_NUMBER
+	 , HIRE_DATE
+	 , JOB_ID
+	 , SALARY
+	 , COMMISSION_PCT
+	 , MANAGER_ID
+	 , DEPARTMENT_ID
+  FROM EMPLOYEES
+ WHERE COMMISSION_PCT IS NOT NULL
+;
 -- 22. 이름의 첫 글자가 'D' 인 사원들의 모든 정보를 조회한다.
 -- 23. 성의 마지막 글자가 'a' 인 사원들의 모든 정보를 조회한다.
 -- 24. 전화번호에 '.124.'이 포함된 사원들의 모든 정보를 조회한다.
