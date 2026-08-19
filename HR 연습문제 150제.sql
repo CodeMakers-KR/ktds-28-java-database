@@ -485,9 +485,25 @@ SELECT EMPLOYEE_ID
 -- 50. 가장 늦게 입사한 사원의 모든 정보를 조회한다.
 -- 51. 가장 일찍 입사한 사원의 모든 정보를 조회한다.
 -- 52. 사내의 최고급여과 최저급여의 차이를 조회한다.
+SELECT MAX(SALARY) - MIN(SALARY) -- 21,900
+  FROM EMPLOYEES
+;
 -- 53. 102번 직원의 직속 부하직원의 수를 조회한다.
+SELECT COUNT(EMPLOYEE_ID) -- 1
+  FROM EMPLOYEES
+ WHERE MANAGER_ID = 102
+;
 -- 54. 113번 직원의 직속 부하직원의 수를 조회한다.
+SELECT COUNT(EMPLOYEE_ID) -- 0
+  FROM EMPLOYEES
+ WHERE MANAGER_ID = 113
+;
 -- 55. 'SA_REP' 직무인 직원 중 가장 높은 급여과 가장 낮은 급여를 조회한다.
+SELECT MAX(SALARY) -- 11,500
+     , MIN(SALARY) -- 6,100
+  FROM EMPLOYEES
+ WHERE JOB_ID = 'SA_REP'
+;
 -- 56. 부서아이디별 평균 급여를 조회한다.
 -- 57. 직무아이디별 평균 급여, 최고급여, 최저급여를 조회한다.
 -- 58. 직무아이디별 사원의 수를 조회한다.

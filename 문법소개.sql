@@ -1,17 +1,61 @@
 -- 전체 사원들의 급여 총 합을 조회한다.
+SELECT SUM(SALARY) -- 691,416
+  FROM EMPLOYEES
+;
 -- 전체 사원 중 최저 급여를 조회한다.
+SELECT MIN(SALARY) -- 2,100
+  FROM EMPLOYEES
+;  
 -- 전체 사원 중 최고 급여를 조회한다.
+SELECT MAX(SALARY) -- 24,000
+  FROM EMPLOYEES
+;
 -- 전체 사원의 평균 급여를 조회한다.
+SELECT AVG(SALARY) -- 6,461.831775700934579439252336448598130841
+  FROM EMPLOYEES
+;
 -- 전체 사원 중 가장 일찍 입사한 날짜를 조회한다.
+SELECT MIN(HIRE_DATE) 
+  FROM EMPLOYEES
+;
 -- 전체 사원 중 가장 늦게 입사한 날짜를 조회한다.
+SELECT MAX(HIRE_DATE) -- 2008-04-21 00:00:00.000
+  FROM EMPLOYEES
+;
 -- 50번 부서에서 근무하는 사원들의 급여 총합을 조회한다.
+SELECT SUM(SALARY) -- 156,400
+  FROM EMPLOYEES
+ WHERE DEPARTMENT_ID = 50
+;
 -- 60번 부서에서 근무하는 사원들의 평균 급여를 조회한다.
+SELECT AVG(SALARY) -- 5,760
+  FROM EMPLOYEES
+ WHERE DEPARTMENT_ID = 60
+;
 -- 80번 부서에서 근무하는 사원들의 최고 급여를 조회한다.
+SELECT MAX(SALARY) -- 14,000
+  FROM EMPLOYEES
+ WHERE DEPARTMENT_ID = 80
+;
 -- 90번 부서에서 근무하는 사원들의 최저 급여를 조회한다.
+SELECT MIN(SALARY) -- 17,000
+  FROM EMPLOYEES
+ WHERE DEPARTMENT_ID = 90
+;
 -- 100번 부서에서 근무하는 사원들의 최고 급여, 최저 급여, 
--- 가장 일찍 입사한 날짜, 가장 늦게 입사한 날짜, 평균 급여, 급여 총합을 조회한다.
+-- 가장 일찍 입사한 날짜(YYYY-MM-DD), 가장 늦게 입사한 날짜(YYYY-MM-DD), 평균 급여, 급여 총합을 조회한다.
+SELECT MAX(SALARY) -- 24,000
+	 , MIN(SALARY) -- 2,100
+	 , TO_CHAR(MIN(HIRE_DATE), 'YYYY-MM-DD') -- 2001-01-13
+	 , TO_CHAR(MAX(HIRE_DATE), 'YYYY-MM-DD') -- 2008-04-21
+	 , AVG(SALARY) -- 6,461.831775700934579439252336448598130841
+	 , SUM(SALARY) -- 691,416
+  FROM EMPLOYEES
+;
 -- 전체 사원들의 최고 급여와 최저 급여의 차를 조회한다.
-
+SELECT MAX(SALARY) - MIN(SALARY) -- 21,900
+  FROM EMPLOYEES
+;
 -- 전체 사원의 수를 조회한다.
 SELECT COUNT(EMPLOYEE_ID)
   FROM EMPLOYEES
