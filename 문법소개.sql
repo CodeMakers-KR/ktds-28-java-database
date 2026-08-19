@@ -1,13 +1,57 @@
 -- 이름이 'a'로 끝나는 사원의 이름과 성을 조회한다.
+SELECT FIRST_NAME
+	 , LAST_NAME
+  FROM EMPLOYEES
+ WHERE FIRST_NAME LIKE '%a'
+;
 -- 성이 'A'로 시작하는 사원의 이름과 성을 조회한다.
+SELECT FIRST_NAME
+	 , LAST_NAME
+  FROM EMPLOYEES
+ WHERE LAST_NAME LIKE 'A%'
+;
 -- 이름과 성에 'e'가 있는(포함되어있는) 사원의 이름과 성을 조회한다.
+SELECT FIRST_NAME
+	 , LAST_NAME
+  FROM EMPLOYEES
+ WHERE FIRST_NAME LIKE '%e%'
+   AND LAST_NAME LIKE '%e%'
+;
 -- 이름 또는 성에 'g'가 있는(포함되어있는) 사원의 이름과 성을 조회한다.
+SELECT FIRST_NAME
+	 , LAST_NAME
+  FROM EMPLOYEES
+ WHERE FIRST_NAME LIKE '%g%'
+    OR LAST_NAME LIKE '%g%'
+;
 -- 이름이 5자리인 사원의 이름과 성을 조회한다.
+SELECT FIRST_NAME
+	 , LAST_NAME
+  FROM EMPLOYEES
+ WHERE FIRST_NAME LIKE '_____'
+;
 -- 이름이 4자리 이상인 사원의 이름과 성을 조회한다.
+SELECT FIRST_NAME
+	 , LAST_NAME
+  FROM EMPLOYEES
+ WHERE FIRST_NAME LIKE '____%'
+;
 -- 성이 4자리 이상이며 다섯번째 자리의 글자가 'e'인 사원의 이름과 성을 조회한다.
+SELECT FIRST_NAME
+	 , LAST_NAME
+  FROM EMPLOYEES
+ WHERE LAST_NAME LIKE '____e%'
+;
 -- 도시명이 'S'로 시작하는 도시의 이름을 조회한다.
+SELECT CITY
+  FROM LOCATIONS
+ WHERE CITY LIKE 'S%'
+;
 -- 부서의 이름에 'r'이 있는(포함되어있는) 부서의 이름을 조회한다.
-
+SELECT DEPARTMENT_NAME
+  FROM DEPARTMENTS
+ WHERE DEPARTMENT_NAME LIKE '%r%'
+;
 -- 급여가 8000 이상이면서 커미션을 받는 사원의 급여, 커미션 비율을 조회한다.
 SELECT SALARY
 	 , COMMISSION_PCT
