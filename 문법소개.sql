@@ -1,3 +1,174 @@
+-- ERD.
+-- 103번 사원이 근무중인 부서의 이름을 조회한다.
+SELECT DEPARTMENT_NAME
+  FROM DEPARTMENTS
+ WHERE DEPARTMENT_ID = (SELECT DEPARTMENT_ID
+						  FROM EMPLOYEES
+						 WHERE EMPLOYEE_ID = 103)
+;
+
+SELECT DEPARTMENT_ID
+  FROM EMPLOYEES
+ WHERE EMPLOYEE_ID = 103
+;
+-- 118번 사원이 근무중인 부서의 도시명을 조회한다.
+-- 1. 118번 사원이 근무중인 부서의 지역 번호를 조회한다.
+SELECT LOCATION_ID -- 1700
+  FROM DEPARTMENTS
+ WHERE DEPARTMENT_ID = (SELECT DEPARTMENT_ID
+						  FROM EMPLOYEES
+						 WHERE EMPLOYEE_ID = 118)
+;
+SELECT DEPARTMENT_ID
+  FROM EMPLOYEES
+ WHERE EMPLOYEE_ID = 118
+; 
+-- 2. 118번 사원이 근무중인 지역 번호로 도시명을 조회한다.
+SELECT CITY
+  FROM LOCATIONS
+ WHERE LOCATION_ID = (SELECT LOCATION_ID -- 1700
+						FROM DEPARTMENTS
+					   WHERE DEPARTMENT_ID = (SELECT DEPARTMENT_ID
+												FROM EMPLOYEES
+											   WHERE EMPLOYEE_ID = 118))
+;
+-- 'Seattle' 에서 근무중인 사원들의 직무 명을 중복없이 조회한다.
+-- 1. 'Seattle' 에 존재하는 부서의 번호
+SELECT DEPARTMENT_ID
+  FROM DEPARTMENTS
+ WHERE LOCATION_ID = 'Seattle'의 지역 번호
+;
+SELECT LOCATION_ID
+  FROM LOCATIONS
+ WHERE CITY = 'Seattle'
+;
+
+SELECT DEPARTMENT_ID -- 10, 30, 90, 100, 110, ...
+  FROM DEPARTMENTS
+ WHERE LOCATION_ID = (SELECT LOCATION_ID
+					    FROM LOCATIONS
+					   WHERE CITY = 'Seattle')
+;
+
+-- 2. 'Seattle'에 존재하는 부서에서 근무하는 사원들의 JOB_ID
+SELECT JOB_ID
+  FROM EMPLOYEES
+ WHERE DEPARTMENT_ID IN ('Seattle' 에 존재하는 부서의 번호)
+;
+SELECT DISTINCT JOB_ID -- AD_ASST, PU_MAN, PU_CLERK, ...
+  FROM EMPLOYEES
+ WHERE DEPARTMENT_ID IN (SELECT DEPARTMENT_ID -- 10, 30, 90, 100, 110, ...
+						   FROM DEPARTMENTS
+						  WHERE LOCATION_ID = (SELECT LOCATION_ID -- 10, 30, 90, 100, 110, ...
+											     FROM LOCATIONS
+											    WHERE CITY = 'Seattle'))
+;
+-- 3. 'Seattle'에 존재하는 부서에서 근무하는 사원들의 직무명
+SELECT JOB_TITLE
+  FROM JOBS
+ WHERE JOB_ID IN ('Seattle'에 존재하는 부서에서 근무하는 사원들의 JOB_ID)
+;
+SELECT JOB_TITLE
+  FROM JOBS
+ WHERE JOB_ID IN (SELECT DISTINCT JOB_ID -- AD_ASST, PU_MAN, PU_CLERK, ...
+				    FROM EMPLOYEES
+				   WHERE DEPARTMENT_ID IN (SELECT DEPARTMENT_ID -- 10, 30, 90, 100, 110, ...
+										     FROM DEPARTMENTS
+										    WHERE LOCATION_ID = (SELECT LOCATION_ID -- 10, 30, 90, 100, 110, ...
+															       FROM LOCATIONS
+															      WHERE CITY = 'Seattle')))
+;
+-- 102번 사원이 수행중인 직무의 이름과 최대 급여, 최소 급여를 조회한다.
+SELECT JOB_TITLE
+	 , MAX_SALARY
+	 , MIN_SALARY
+  FROM JOBS
+ WHERE JOB_ID = (SELECT JOB_ID
+				   FROM EMPLOYEES
+				  WHERE EMPLOYEE_ID = 102)
+;
+SELECT JOB_ID
+  FROM EMPLOYEES
+ WHERE EMPLOYEE_ID = 102
+;
+-- Seattle에 있는 부서의 이름과 부서장의 사원 번호를 조회한다.
+SELECT DEPARTMENT_NAME
+	 , MANAGER_ID
+  FROM DEPARTMENTS
+ WHERE LOCATION_ID = (SELECT LOCATION_ID
+					    FROM LOCATIONS
+					   WHERE CITY = 'Seattle')
+;
+SELECT LOCATION_ID
+  FROM LOCATIONS
+ WHERE CITY = 'Seattle'
+;
+-- Asia에서 근무중인 사원들의 이름과 성, 부서 번호를 조회한다.
+-- 1. 'Asia'에 존재하는 국가 아이디를 조회한다.
+SELECT COUNTRY_ID
+  FROM COUNTRIES
+ WHERE REGION_ID = 'Asia'의 대륙 아이디
+;
+SELECT REGION_ID -- 3
+  FROM REGIONS
+ WHERE REGION_NAME = 'Asia'
+;
+SELECT COUNTRY_ID -- AU, CN, IN, JP, ML, SG
+  FROM COUNTRIES
+ WHERE REGION_ID = (SELECT REGION_ID -- 3
+					  FROM REGIONS
+					 WHERE REGION_NAME = 'Asia')
+;
+-- 2. 'Asia'에 존재하는 국가의 지역번호를 조회한다.
+SELECT LOCATION_ID
+  FROM LOCATIONS
+ WHERE COUNTRY_ID IN ('Asia'에 존재하는 국가 아이디)
+;
+SELECT LOCATION_ID -- 1200, 1300, 2000, 2100, 2200, 2300
+  FROM LOCATIONS
+ WHERE COUNTRY_ID IN (SELECT COUNTRY_ID -- AU, CN, IN, JP, ML, SG
+					    FROM COUNTRIES
+					   WHERE REGION_ID = (SELECT REGION_ID -- 3
+										    FROM REGIONS
+										   WHERE REGION_NAME = 'Asia'))
+;
+-- 3. 'Asia'에 존재하는 지역의 부서번호를 조회한다.
+SELECT DEPARTMENT_ID
+  FROM DEPARTMENTS
+ WHERE LOCATION_ID IN ('Asia'에 존재하는 국가의 지역번호)
+;
+
+SELECT DEPARTMENT_ID -- NULL
+  FROM DEPARTMENTS
+ WHERE LOCATION_ID IN (SELECT LOCATION_ID -- 1200, 1300, 2000, 2100, 2200, 2300
+						 FROM LOCATIONS
+						WHERE COUNTRY_ID IN (SELECT COUNTRY_ID -- AU, CN, IN, JP, ML, SG
+											   FROM COUNTRIES
+											  WHERE REGION_ID = (SELECT REGION_ID -- 3
+																   FROM REGIONS
+																  WHERE REGION_NAME = 'Asia')))
+;
+-- 4. 'Asia'에 존재하는 부서에서 근무하는 사원의 정보를 조회한다.
+SELECT FIRST_NAME
+	 , LAST_NAME
+	 , DEPARTMENT_ID
+  FROM EMPLOYEES
+ WHERE DEPARTMENT_ID IN ('Asia'에 존재하는 지역의 부서번호)
+;
+SELECT FIRST_NAME
+	 , LAST_NAME
+	 , DEPARTMENT_ID
+  FROM EMPLOYEES
+ WHERE DEPARTMENT_ID IN (SELECT DEPARTMENT_ID -- NULL
+						   FROM DEPARTMENTS
+						  WHERE LOCATION_ID IN (SELECT LOCATION_ID -- 1200, 1300, 2000, 2100, 2200, 2300
+												  FROM LOCATIONS
+												 WHERE COUNTRY_ID IN (SELECT COUNTRY_ID -- AU, CN, IN, JP, ML, SG
+																	    FROM COUNTRIES
+																	   WHERE REGION_ID = (SELECT REGION_ID -- 3
+																						    FROM REGIONS
+																						   WHERE REGION_NAME = 'Asia'))))
+;
 -- 평균 급여보다 많은 급여를 받는 사원의 이름, 성, 급여를 조회한다.
 -- 1. 특정할 수 없는 데이터가 무엇인가?
 ---   ==> 평균 급여 => 6461.831775700934579439252336448598130841
