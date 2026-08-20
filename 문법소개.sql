@@ -1,4 +1,33 @@
 -- ERD.
+-- 80번 부서의 부서장으로 근무하는 사원의 직무명을 조회한다.
+-- 1. 80번 부서의 부서장의 직무아이디를 조회한다.
+SELECT JOB_ID
+  FROM EMPLOYEES
+ WHERE EMPLOYEE_ID = 80번 부서의 부서장 사원번호
+;
+SELECT MANAGER_ID -- 145
+  FROM DEPARTMENTS
+ WHERE DEPARTMENT_ID = 80
+;
+SELECT JOB_ID -- SA_MAN
+  FROM EMPLOYEES
+ WHERE EMPLOYEE_ID = (SELECT MANAGER_ID -- 145
+					    FROM DEPARTMENTS
+					   WHERE DEPARTMENT_ID = 80)
+;
+-- 2. 80번 부서의 부서장 사원의 직무 명을 조회한다.
+SELECT JOB_TITLE
+  FROM JOBS
+ WHERE JOB_ID = 80번 부서 부서장의 직무 아이디
+;
+SELECT JOB_TITLE -- Sales Manager
+  FROM JOBS
+ WHERE JOB_ID = (SELECT JOB_ID -- SA_MAN
+				   FROM EMPLOYEES
+				  WHERE EMPLOYEE_ID = (SELECT MANAGER_ID -- 145
+									     FROM DEPARTMENTS
+									    WHERE DEPARTMENT_ID = 80))
+;
 -- 103번 사원이 근무중인 부서의 이름을 조회한다.
 SELECT DEPARTMENT_NAME
   FROM DEPARTMENTS
