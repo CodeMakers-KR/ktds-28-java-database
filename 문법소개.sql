@@ -1,4 +1,68 @@
 -- ERD.
+
+-- 테이블 조인(여러 테이블을 관계를 이용해 하나의 테이블로 만드는 과정) 연습
+-- 직무가 변경된 사원들의 사원번호, 이름, 급여, 현재 수행중인 직무의 이름, 
+--      과거에 근무했던 부서의 이름, 현재 근무중인 부서의 이름을 조회한다.
+
+
+
+-- 3개 이상의 테이블 조인 방법
+-- 사원 + 부서 + 직무
+SELECT *
+  FROM EMPLOYEES E
+ INNER JOIN DEPARTMENTS D -- 사원 + 부서
+    ON E.DEPARTMENT_ID = D.DEPARTMENT_ID
+ INNER JOIN JOBS J -- 사원 + 직무
+    ON E.JOB_ID = J.JOB_ID
+;
+-- 사원 + 부서 + 직무 + 지역
+SELECT *
+  FROM EMPLOYEES E
+ INNER JOIN DEPARTMENTS D -- 사원 + 부서
+    ON E.DEPARTMENT_ID = D.DEPARTMENT_ID
+ INNER JOIN JOBS J -- 사원 + 직무
+    ON J.JOB_ID = E.JOB_ID
+ INNER JOIN LOCATIONS L -- 부서 + 지역
+    ON L.LOCATION_ID = D.LOCATION_ID
+;
+-- 사원 + 부서 + 지역 + 국가 + 대륙
+SELECT *
+  FROM EMPLOYEES E
+ INNER JOIN DEPARTMENTS D -- 사원 + 부서
+    ON E.DEPARTMENT_ID = D.DEPARTMENT_ID
+ INNER JOIN LOCATIONS L -- 부서 + 지역
+    ON L.LOCATION_ID = D.LOCATION_ID
+ INNER JOIN COUNTRIES C -- 지역 + 국가
+    ON C.COUNTRY_ID = L.COUNTRY_ID
+ INNER JOIN REGIONS R -- 국가 + 대륙
+    ON R.REGION_ID = C.REGION_ID
+;
+-- 사원 테이블 + 부서 테이블 ==> 사원_부서
+-- 사원의 이름, 사원의 성, 급여, 부서장의 사원번호, 부서명
+SELECT E.FIRST_NAME
+	 , E.LAST_NAME
+	 , E.SALARY
+	 , D.MANAGER_ID
+	 , D.DEPARTMENT_NAME
+  FROM EMPLOYEES E
+ INNER JOIN DEPARTMENTS D
+    ON D.DEPARTMENT_ID = E.DEPARTMENT_ID
+;
+
+-- 사원의 이름과 성, 직무아이디, 직무의 이름, 급여, 최대 급여, 최소 급여를 조회한다.
+SELECT E.FIRST_NAME
+	 , E.LAST_NAME
+	 , J.JOB_ID
+	 , J.JOB_TITLE
+	 , E.SALARY
+	 , J.MAX_SALARY
+	 , J.MIN_SALARY
+  FROM EMPLOYEES E
+ INNER JOIN JOBS J
+    ON E.JOB_ID = J.JOB_ID
+;
+
+
 -- 80번 부서의 부서장으로 근무하는 사원의 직무명을 조회한다.
 -- 1. 80번 부서의 부서장의 직무아이디를 조회한다.
 SELECT JOB_ID
