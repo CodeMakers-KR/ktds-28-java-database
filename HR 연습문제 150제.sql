@@ -1480,11 +1480,12 @@ CONNECT BY PRIOR EMPLOYEE_ID = MANAGER_ID
 	  , LAST_NAME
 	  , MANAGER_ID
    FROM EMPLOYEES
-  START WITH EMPLOYEE_ID = 100
+  START WITH EMPLOYEE_ID = 101
 CONNECT BY PRIOR EMPLOYEE_ID = MANAGER_ID
 ;
 -- 139. 114번 직원의 모든 상사들의 이름, 성, 상사사원번호, 상사사원명을 계층 조회한다.
  SELECT LEVEL
+ 	  , EMPLOYEE_ID
 	  , FIRST_NAME
 	  , LAST_NAME
 	  , MANAGER_ID
@@ -1494,12 +1495,14 @@ CONNECT BY PRIOR MANAGER_ID = EMPLOYEE_ID
 ;
 -- 140. 114번 직원의 모든 상사들의 이름, 성, 상사사원번호, 상사사원명을 역순으로 계층 조회한다.
  SELECT LEVEL
+ 	  , EMPLOYEE_ID
 	  , FIRST_NAME
 	  , LAST_NAME
 	  , MANAGER_ID
    FROM EMPLOYEES
-  START WITH EMPLOYEE_ID = 114
+  START WITH EMPLOYEE_ID = 109
 CONNECT BY PRIOR MANAGER_ID = EMPLOYEE_ID
+  ORDER BY LEVEL DESC
 ;
 -- 141. 부서별 사원의 수를 조인을 이용해 다음과 같이 조회한다."부서명 (사원의 수)"
 -- 142. 부서별 사원의 수를 스칼라쿼리를 이용해 다음과 같이 조회한다. "부서명 (사원의 수)"
