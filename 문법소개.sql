@@ -1,4 +1,32 @@
 -- ERD.
+-- 테이블 조인 + 그룹핑
+-- 직무명 별 수행중인 사원의 수를 조회한다.
+SELECT J.JOB_TITLE
+	 , COUNT(E.EMPLOYEE_ID)
+  FROM EMPLOYEES E
+ INNER JOIN JOBS J
+    ON E.JOB_ID = J.JOB_ID
+ GROUP BY J.JOB_TITLE
+;
+-- 직무명 별 수행중인 사원의 수를 조회한다. 직무명으로 오름차순 정렬
+SELECT J.JOB_TITLE
+	 , COUNT(E.EMPLOYEE_ID)
+  FROM EMPLOYEES E
+ INNER JOIN JOBS J
+    ON E.JOB_ID = J.JOB_ID
+ GROUP BY J.JOB_TITLE
+ ORDER BY J.JOB_TITLE ASC
+;
+-- 직무명 별 수행중인 사원의 수를 조회한다. 사원의 수로 내림차순 정렬
+SELECT J.JOB_TITLE
+	 , COUNT(E.EMPLOYEE_ID) AS EMP_CNT
+  FROM EMPLOYEES E
+ INNER JOIN JOBS J
+    ON E.JOB_ID = J.JOB_ID
+ GROUP BY J.JOB_TITLE
+ ORDER BY EMP_CNT DESC
+;
+
 -- 테이블 조인 + 조건
 -- 108번 사원의 이름과 부서명을 조회한다.
 SELECT E.FIRST_NAME
