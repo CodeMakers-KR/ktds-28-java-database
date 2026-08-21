@@ -1457,9 +1457,50 @@ SELECT E_MAN.FIRST_NAME
 -- 135. 가장 많은 사원이 있는 부서의 국가명을 조회한다.
 -- 136. 'Europe' 에서 가장 많은 사원들이 있는 부서명을 조회한다.
 -- 137. 100번 사원의 모든 부하직원을 계층조회한다. 단, LEVEL이 4인 사원은 제외한다.
+ SELECT LEVEL
+      , EMPLOYEE_ID
+	  , FIRST_NAME
+	  , LAST_NAME
+	  , EMAIL
+	  , PHONE_NUMBER
+	  , HIRE_DATE
+	  , JOB_ID
+	  , SALARY
+	  , COMMISSION_PCT
+	  , MANAGER_ID
+	  , DEPARTMENT_ID
+   FROM EMPLOYEES
+  WHERE LEVEL != 4
+  START WITH EMPLOYEE_ID = 100
+CONNECT BY PRIOR EMPLOYEE_ID = MANAGER_ID
+;
 -- 138. 101번 사원의 모든 부하직원 들의 이름, 성, 상사사원번호, 상사사원명을 계층 조회한다.
+ SELECT LEVEL
+	  , FIRST_NAME
+	  , LAST_NAME
+	  , MANAGER_ID
+   FROM EMPLOYEES
+  START WITH EMPLOYEE_ID = 100
+CONNECT BY PRIOR EMPLOYEE_ID = MANAGER_ID
+;
 -- 139. 114번 직원의 모든 상사들의 이름, 성, 상사사원번호, 상사사원명을 계층 조회한다.
+ SELECT LEVEL
+	  , FIRST_NAME
+	  , LAST_NAME
+	  , MANAGER_ID
+   FROM EMPLOYEES
+  START WITH EMPLOYEE_ID = 114
+CONNECT BY PRIOR MANAGER_ID = EMPLOYEE_ID
+;
 -- 140. 114번 직원의 모든 상사들의 이름, 성, 상사사원번호, 상사사원명을 역순으로 계층 조회한다.
+ SELECT LEVEL
+	  , FIRST_NAME
+	  , LAST_NAME
+	  , MANAGER_ID
+   FROM EMPLOYEES
+  START WITH EMPLOYEE_ID = 114
+CONNECT BY PRIOR MANAGER_ID = EMPLOYEE_ID
+;
 -- 141. 부서별 사원의 수를 조인을 이용해 다음과 같이 조회한다."부서명 (사원의 수)"
 -- 142. 부서별 사원의 수를 스칼라쿼리를 이용해 다음과 같이 조회한다. "부서명 (사원의 수)"
 -- 143. 사원의 정보를 다음과 같이 조회한다. "사원번호 번 사원의 이름은 성이름 입니다."

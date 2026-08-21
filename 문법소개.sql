@@ -136,19 +136,63 @@ WITH MENU AS (
 		 , '2300' AS TOP_MENU_ID
       FROM DUAL
 )
-SELECT MENU_ID
-	 , MENU_NAME
-	 , TOP_MENU_ID
-  FROM MENU
+-- 재귀조인을 이용한 계층 데이터 조회
+-- 수입명품(1203)메뉴의 모든 상위 메뉴를 조회한다.
+ SELECT MENU_ID
+	  , MENU_NAME
+	  , TOP_MENU_ID
+	  , LEVEL
+   FROM MENU
+  START WITH MENU_ID = 1203
+--CONNECT BY PRIOR TOP_MENU_ID = MENU_ID
+CONNECT BY MENU_ID = PRIOR TOP_MENU_ID
 ;
+-- 브랜드패션(1000) 메뉴의 모든 하위 메뉴를 조회한다.
+/*
+ SELECT MENU_ID
+ 	  , MENU_NAME
+  	  , TOP_MENU_ID
+  	  , LEVEL
+   FROM MENU
+  START WITH MENU_ID = 1000
+CONNECT BY PRIOR MENU_ID = TOP_MENU_ID
+*/
+;
+-- 재귀참조를 이용한 조인
+/*SELECT M_TOP.MENU_ID
+	 , M_TOP.MENU_NAME
+	 , M_TOP.TOP_MENU_ID
+	 , M_SUB.MENU_ID
+	 , M_SUB.MENU_NAME
+	 , M_SUB.TOP_MENU_ID
+  FROM MENU M_TOP
+ INNER JOIN MENU M_SUB
+    ON M_TOP.MENU_ID = M_SUB.TOP_MENU_ID
+*/
 -- 브랜드패션(1000) 메뉴의 하위 메뉴를 조회한다. (1100, 1200, 1300)
+ --WHERE M_TOP.MENU_ID = 1000
 -- 패션의류/잡화/뷰티(2000) 메뉴의 하위 메뉴를 조회한다. (2100, 2200, 2300)
+ --WHERE M_TOP.MENU_ID = 2000
 -- 브랜드잡화(1200) 메뉴의 하위 메뉴를 조회한다. (1201, 1202, 1203)
+ --WHERE M_TOP.MENU_ID = 1200
 -- 유아동 신발/잡화(2203) 메뉴의 하위 메뉴를 조회한다.
-
+ --WHERE M_TOP.MENU_ID = 2203
 -- 브랜드 캐쥬얼의류(1103) 메뉴의 부모 메뉴의 이름을 조회한다. (브랜드의류(1100))
+ --WHERE M_SUB.MENU_ID = 1103
 -- 브랜드의류(1100) 메뉴의 부모 메뉴의 이름을 조회한다. (브랜드패션(1000))
+ --WHERE M_SUB.MENU_ID = 1100   
 -- 브랜드패션(1000) 메뉴의 부모 메뉴의 이름을 조회한다.
+ --WHERE M_SUB.MENU_ID = 1000
+
+;
+
+
+
+
+
+
+
+
 -- ERD.
 -- 테이블 조인 + 그룹핑
 -- 직무명 별 수행중인 사원의 수를 조회한다.
