@@ -2,7 +2,6 @@
 SELECT SYSDATE
   FROM DUAL -- DUAL --> Dummy Table
 ;
-
 -- 2. 현재 시간을 "연-월-일" 포멧으로 조회한다.
 SELECT TO_CHAR(SYSDATE, 'YYYY-MM-DD')
   FROM DUAL
@@ -310,7 +309,6 @@ SELECT EMPLOYEE_ID
     OR FIRST_NAME LIKE '%a%'
     OR LAST_NAME LIKE '%a%'
 ;
-
 SELECT EMPLOYEE_ID
 	 , FIRST_NAME
 	 , LAST_NAME
@@ -337,7 +335,6 @@ SELECT EMPLOYEE_ID
 		  FROM EMPLOYEES)
  WHERE NAME LIKE '%a%'
 ;
-
 -- 27. 국가명이 6자리인 국가의 모든 정보를 조회한다.
 SELECT COUNTRY_ID
 	 , COUNTRY_NAME
@@ -436,6 +433,7 @@ SELECT TO_CHAR(HIRE_DATE, 'YYYY')
 --                7000 이하이면 "대리", 
 --                9000 이하이면 "과장", 
 --                그 외에는 "임원" 으로 조회한다.
+
 -- 47. 모든 사원들의 모든 정보를 급여 오름차순 정렬하여 조회한다.
 SELECT EMPLOYEE_ID
 	 , FIRST_NAME
@@ -497,7 +495,6 @@ SELECT EMPLOYEE_ID
   FROM EMPLOYEES
  WHERE HIRE_DATE = 가장 최신의 입사일
 ;
-
 SELECT EMPLOYEE_ID
 	 , FIRST_NAME
 	 , LAST_NAME
@@ -528,7 +525,6 @@ SELECT EMPLOYEE_ID
   FROM EMPLOYEES
  WHERE HIRE_DATE = 가장 과거의 입사일
 ;
-
 SELECT EMPLOYEE_ID
 	 , FIRST_NAME
 	 , LAST_NAME
@@ -745,6 +741,7 @@ SELECT EMPLOYEE_ID
 ;
 -- 67. 자신의 상사보다 더 많은 급여를 받는 사원의 모든 정보를 조회한다.
 -- 68. 자신의 상사보다 더 일찍 입사한 사원의 모든 정보를 조회한다.
+
 -- 69. 가장 많은 커미션을 받는 사원의 모든 정보를 조회한다.
 --- 1. 특정할 수 없는 것? 
 --- 최대 커미션 비율 --> 0.4
@@ -785,6 +782,7 @@ SELECT SALARY
  						   FROM EMPLOYEES)
 ;
 -- 71. 사원이 속한 부서의 평균급여보다 적게 받는 사원의 모든 정보를 조회한다.
+
 -- 72. 50번 부서의 부서장의 이름, 성, 급여를 조회한다.
 --- 1. 특정할 수 없는 것?
 --- 50번 부서의 부서장 사원 번호 --> 121
@@ -818,12 +816,11 @@ SELECT DEPARTMENT_NAME
  							   FROM EMPLOYEES
  							  WHERE DEPARTMENT_ID IS NOT NULL)
 ;
-
 SELECT DEPARTMENT_NAME
   FROM DEPARTMENTS
  WHERE DEPARTMENT_ID NOT IN (SELECT DEPARTMENT_ID
  							   FROM EMPLOYEES)
-
+;
 -- 74. 직무가 변경된 사원의 모든 정보를 조회한다.
 --- 1. 특정할 수 없는 것? 
 --- 직무가 변경된 사원들의 사원 번호 --> 중복값이 있으므로 중복 제거
@@ -872,6 +869,7 @@ SELECT EMPLOYEE_ID
  						 	 FROM JOB_HISTORY)
 ;
 -- 76. 직무가 가장 많이 변경된 부서의 이름을 조회한다.
+
 -- 77. 근무중인 사원이 없는 도시를 조회한다.
 -- 1. 근무중인 사원이 있는 부서의 지역의 번호
 SELECT LOCATION_ID
@@ -1004,7 +1002,30 @@ SELECT EMPLOYEE_ID
 																						   WHERE REGION_NAME = 'Europe'))))
 ;
 -- 82. 'Seattle' 에서 근무중인 사원의 이름, 성, 급여, 부서명 을 조회한다.
+SELECT E.FIRST_NAME
+	 , E.LAST_NAME
+	 , E.SALARY
+	 , D.DEPARTMENT_NAME
+  FROM EMPLOYEES E
+ INNER JOIN DEPARTMENTS D
+    ON E.DEPARTMENT_ID = D.DEPARTMENT_ID
+ WHERE D.LOCATION_ID = (SELECT LOCATION_ID
+ 						  FROM LOCATIONS 
+ 						 WHERE CITY = 'Seattle')
+;
 -- 83. 'Seattle' 에서 근무하지 않는 모든 사원의 이름, 성, 급여, 부서명, 도시를 조회한다.
+SELECT E.FIRST_NAME
+	 , E.LAST_NAME
+	 , E.SALARY
+	 , D.DEPARTMENT_NAME
+	 , L.CITY
+  FROM EMPLOYEES E
+ INNER JOIN DEPARTMENTS D
+    ON E.DEPARTMENT_ID = D.DEPARTMENT_ID
+ INNER JOIN LOCATIONS L
+ 	ON D.LOCATION_ID = L.LOCATION_ID
+ WHERE L.CITY != 'Seattle'
+;
 -- 84. 모든 사원들의 이름, 성, 급여, 부서명을 부서번호로 내림차순 정렬하여 조회한다.
 SELECT E.FIRST_NAME
 	 , E.LAST_NAME
@@ -1013,8 +1034,24 @@ SELECT E.FIRST_NAME
   FROM DEPARTMENTS D
  INNER JOIN EMPLOYEES E
     ON D.DEPARTMENT_ID = E.DEPARTMENT_ID
+ ORDER BY D.DEPARTMENT_ID DESC
 ;
 -- 85. 2007년에 직무가 변경된 사원들의 현재 직무명, 부서명, 사원번호, 이름, 성을 조회한다.
+SELECT J.JOB_ID
+	 , D.DEPARTMENT_ID
+	 , E.EMPLOYEE_ID
+	 , E.FIRST_NAME
+	 , E.LAST_NAME
+  FROM EMPLOYEES E
+ INNER JOIN DEPARTMENTS D
+    ON E.DEPARTMENT_ID = D.DEPARTMENT_ID
+ INNER JOIN JOBS J
+    ON J.JOB_ID = E.JOB_ID
+ WHERE E.EMPLOYEE_ID IN (SELECT EMPLOYEE_ID
+ 	   					   FROM JOB_HISTORY
+ 	   					  WHERE START_DATE >= TO_DATE('2007-01-01', 'YYYY-MM-DD')
+ 	   					    AND START_DATE < TO_DATE('2008-01-01', 'YYYY-MM-DD'))
+;
 -- 86. 부서장이 없는 부서명 중 첫 글자가 'C' 로 시작하는 부서명을 조회한다.
 SELECT DEPARTMENT_NAME
   FROM DEPARTMENTS
@@ -1106,13 +1143,79 @@ SELECT D.DEPARTMENT_NAME
     ON D.DEPARTMENT_ID = E.DEPARTMENT_ID
 ;
 -- 93. 우편번호가 5자리인 도시에서 근무하는 사원명, 부서명, 도시명, 우편번호를 조회한다.
+SELECT E.FIRST_NAME
+	 , D.DEPARTMENT_NAME
+	 , L.CITY
+	 , L.POSTAL_CODE
+  FROM EMPLOYEES E
+ INNER JOIN DEPARTMENTS D
+    ON E.DEPARTMENT_ID = D.DEPARTMENT_ID
+ INNER JOIN LOCATIONS L
+    ON D.LOCATION_ID = L.LOCATION_ID
+ WHERE L.POSTAL_CODE LIKE '_____'
+;    
 -- 94. 부서장이 있는 부서명 중 첫 글자가 'S' 로 시작하는 부서에서 근무중인 사원의 
 --     이름과 직무명, 부서명을 조회한다.
+SELECT E.FIRST_NAME
+	 , J.JOB_TITLE
+	 , D.DEPARTMENT_NAME
+  FROM EMPLOYEES E
+ INNER JOIN JOBS J
+    ON E.JOB_ID = J.JOB_ID
+ INNER JOIN DEPARTMENTS D
+    ON D.DEPARTMENT_ID = E.DEPARTMENT_ID
+ WHERE D.MANAGER_ID IS NOT NULL
+   AND D.DEPARTMENT_NAME LIKE 'S%'
+;
 -- 95. 90, 60, 100번 부서에서 근무중인 사원의 이름, 성, 부서명을 조회한다.
+SELECT E.FIRST_NAME
+	 , E.LAST_NAME
+	 , D.DEPARTMENT_NAME
+  FROM EMPLOYEES E
+ INNER JOIN DEPARTMENTS D
+    ON E.DEPARTMENT_ID = D.DEPARTMENT_ID
+ WHERE D.DEPARTMENT_ID IN (90, 60, 100)
+;
 -- 96. 부서명이 5글자 미만인 부서에서 근무중인 사원의 이름, 부서명을 조회한다.
+SELECT E.FIRST_NAME
+	 , D.DEPARTMENT_NAME
+  FROM EMPLOYEES E
+ INNER JOIN DEPARTMENTS D
+    ON E.DEPARTMENT_ID = D.DEPARTMENT_ID
+ WHERE D.DEPARTMENT_NAME NOT LIKE '_____%'
+;
 -- 97. 도시명에 띄어쓰기 " " 가 포함된 도시에서 근무중인 사원들의 부서명, 도시명, 사원명을 조회한다.
+SELECT D.DEPARTMENT_NAME
+	 , L.CITY
+	 , E.FIRST_NAME
+  FROM EMPLOYEES E
+ INNER JOIN DEPARTMENTS D
+    ON E.DEPARTMENT_ID = D.DEPARTMENT_ID
+ INNER JOIN LOCATIONS L
+    ON D.LOCATION_ID = L.LOCATION_ID
+ WHERE L.CITY LIKE '% %'
+;
 -- 98. 우편번호에 공백이 없는 도시에서 근무하는 사원의 이름, 부서명, 우편번호를 조회한다.
+SELECT E.FIRST_NAME
+	 , D.DEPARTMENT_NAME
+	 , L.POSTAL_CODE
+  FROM EMPLOYEES E
+ INNER JOIN DEPARTMENTS D
+    ON E.DEPARTMENT_ID = D.DEPARTMENT_ID
+ INNER JOIN LOCATIONS L
+    ON D.LOCATION_ID = L.LOCATION_ID
+ WHERE L.POSTAL_CODE NOT LIKE '% %'
+;
 -- 99. "주"가 없는 도시에서 근무하는 사원의 이름, 도시를 조회한다.
+SELECT E.FIRST_NAME
+	 , L.CITY
+  FROM EMPLOYEES E
+ INNER JOIN DEPARTMENTS D
+    ON E.DEPARTMENT_ID = D.DEPARTMENT_ID
+ INNER JOIN LOCATIONS L
+    ON D.LOCATION_ID = L.LOCATION_ID
+ WHERE L.STATE_PROVINCE IS NULL
+;
 -- 100. 사원들의 사원번호, 이름, 성, 상사의 사원번호, 상사의 이름, 상사의 성을 조회한다.
 SELECT E.EMPLOYEE_ID
 	 , E.FIRST_NAME
@@ -1137,6 +1240,17 @@ SELECT E.FIRST_NAME
  	ON JH.JOB_ID = J_PAST.JOB_ID
 ;
 -- 102. 가장 적은 급여를 받는 사원의 부서명, 이름, 성, 급여, 부서장사원번호를 조회한다.
+SELECT D.DEPARTMENT_NAME
+	 , E.FIRST_NAME
+	 , E.LAST_NAME
+	 , E.SALARY
+	 , D.MANAGER_ID
+  FROM EMPLOYEES E
+ INNER JOIN DEPARTMENTS D
+    ON E.DEPARTMENT_ID = D.DEPARTMENT_ID
+ WHERE E.SALARY = (SELECT MIN(SALARY)
+ 					 FROM EMPLOYEES)
+;
 -- 103. 부서명별 사원의 수를 조회한다.
 -- 104. 대륙명별 사원의 수를 조회한다.
 -- 105. 직무명별 최소급여를 조회한다.
@@ -1164,6 +1278,16 @@ SELECT E.FIRST_NAME
 -- 127. 많은 급여를 받는 사원 중 11번 째 부터 20번째를 조회한다.
 -- 128. 가장 적은 급여를 받는 중 90번 째 부터 100번째를 조회한다.
 -- 129. 가장 적은 급여를 받는 사원의 상사명, 부서명을 조회한다.
+SELECT E_MAN.FIRST_NAME
+	 , D.DEPARTMENT_NAME
+  FROM EMPLOYEES E
+ INNER JOIN EMPLOYEES E_MAN
+    ON E.MANAGER_ID = E_MAN.EMPLOYEE_ID
+ INNER JOIN DEPARTMENTS D
+    ON E.DEPARTMENT_ID = D.DEPARTMENT_ID
+ WHERE E.SALARY = (SELECT MIN(SALARY)
+ 					 FROM EMPLOYEES)
+;
 -- 130. 'PU_CLERK' 직무인 2번째 부터 5번째 사원의 부서명, 직무명을 조회한다.
 -- 131. 월별 최대급여 중 2번째 부터 4번째 데이터만 조회한다.
 -- 132. 근무중인 사원이 가장 많은 도시와 사원의 수를 조회한다.  
@@ -1186,6 +1310,22 @@ SELECT E.FIRST_NAME
 -- 148. 부서별 급여 차이(최고급여 - 최저급여)가 가장 큰 부서에서 근무하는 사원들의 직무명을 
 --      중복없이 조회한다.
 -- 149. 부하직원이 없는 사원의 모든 정보를 조회한다.
+SELECT EMPLOYEE_ID
+	 , FIRST_NAME
+	 , LAST_NAME
+	 , EMAIL
+	 , PHONE_NUMBER
+	 , HIRE_DATE
+	 , JOB_ID
+	 , SALARY
+	 , COMMISSION_PCT
+	 , MANAGER_ID
+	 , DEPARTMENT_ID
+  FROM EMPLOYEES
+ WHERE EMPLOYEE_ID NOT IN (SELECT DISTINCT MANAGER_ID
+ 							 FROM EMPLOYEES
+ 							WHERE MANAGER_ID IS NOT NULL)
+;
 -- 150. 사원번호가 100번인 사원의 사원번호, 이름과 
 --      사원번호로 내림차순 정렬된 사원의 사원번호, 이름을 조회한다.
 /*조회 예
