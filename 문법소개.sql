@@ -1,3 +1,27 @@
+-- SALARY별로 Row 순위 구하기 (가장 높은 SALARY가 1등)
+-- RANK() OVER() - ANSI
+-- 	공동1등 3명, 2등 2명, 3등 3명, 4등 1명 --> 1 1 1 4 4 6 6 6 9
+SELECT SALARY
+	 , RANK() OVER( ORDER BY SALARY DESC ) AS RANK
+  FROM EMPLOYEES
+;
+
+-- DENSE_RANK() OVER() - ANSI
+-- 	공동1등 3명, 2등 2명, 3등 3명, 4등 1명 --> 1 1 1 2 2 3 3 3 4
+SELECT SALARY
+	 , DENSE_RANK() OVER( ORDER BY SALARY DESC ) AS RANK
+  FROM EMPLOYEES
+;
+
+-- ROW_NUMBER() OVER() - ANSI
+-- 	공동1등 3명, 2등 2명, 3등 3명, 4등 1명 --> 1 2 3 4 5 6 7 8 9
+SELECT SALARY
+	 , ROW_NUMBER() OVER( ORDER BY SALARY DESC ) AS RANK
+  FROM EMPLOYEES
+;
+-- ROWNUM - ANSI X
+-- 	공동1등 3명, 2등 1명, 3등 3명, 4등 1명 --> 1 2 3 4 5 6 7 8 9
+
 -- 70, 80, 90, 100 번 부서에서 근무중인 사원의 이름과 부서명을 조회한다.
 SELECT E.FIRST_NAME
 	 , D.DEPARTMENT_NAME
