@@ -1,7 +1,37 @@
 -- [DENSE_]RANK() OVER(), ROW_NUMBER() OVER() 없이 조회.
 -- 사원 중 작은 급여를 받는 10명을 조회한다.
+SELECT FIRST_NAME
+	 , SALARY
+--	 , ROWNUM
+  FROM (SELECT FIRST_NAME
+			 , SALARY
+		  FROM EMPLOYEES
+		 ORDER BY SALARY ASC)
+ WHERE ROWNUM <= 10
+;
 -- 사원 중 많은 급여를 받는 10명을 조회한다.
--- 많은 급여를 받는 중 5 ~ 9 번째 사원을 조회한다.   
+SELECT FIRST_NAME
+	 , SALARY
+  FROM (SELECT FIRST_NAME
+		     , SALARY
+		  FROM EMPLOYEES
+		 ORDER BY SALARY DESC)
+ WHERE ROWNUM <= 10
+;
+-- 많은 급여를 받는 5 ~ 9 번째 사원을 조회한다.   
+SELECT FIRST_NAME
+	 , SALARY
+  FROM (SELECT FIRST_NAME
+		     , SALARY
+		  FROM EMPLOYEES
+		 ORDER BY SALARY DESC)
+ WHERE ROWNUM >= 5
+   AND ROWNUM <= 9
+;
+
+SELECT *
+  FROM EMPLOYEES
+;
 
 -- SALARY별로 Row 순위 구하기 (가장 높은 SALARY가 1등)
 -- RANK() OVER() - ANSI
