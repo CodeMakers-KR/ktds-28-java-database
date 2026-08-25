@@ -1553,7 +1553,7 @@ SELECT R.REGION_NAME
  GROUP BY R.REGION_NAME
  ORDER BY R.REGION_NAME ASC
 ;
--- 119. 수행중인 직무의 최대급여보다 더 많은 급여를 받는 사원의 모든 정보를 조회한다.
+-- 119. 수행중인 직무의 최대급여(JOBS.MAX_SALARY)보다 더 많은 급여를 받는 사원의 모든 정보를 조회한다.
 -- 120. 입사연도별 최소급여를 조회한다.
 SELECT HIRE_YEAR
 	 , MIN(SALARY)
