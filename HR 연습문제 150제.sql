@@ -2328,12 +2328,46 @@ CONNECT BY PRIOR MANAGER_ID = EMPLOYEE_ID
   ORDER BY LEVEL DESC
 ;
 -- 141. 부서별 사원의 수를 조인을 이용해 다음과 같이 조회한다."부서명 (사원의 수)"
+SELECT D.DEPARTMENT_NAME || ' (' || COUNT(E.EMPLOYEE_ID) || ')'
+  FROM EMPLOYEES E
+ INNER JOIN DEPARTMENTS D
+    ON E.DEPARTMENT_ID = D.DEPARTMENT_ID
+ GROUP BY D.DEPARTMENT_NAME
+;
 -- 142. 부서별 사원의 수를 스칼라쿼리를 이용해 다음과 같이 조회한다. "부서명 (사원의 수)"
+SELECT D.DEPARTMENT_NAME || ' ('
+		|| (SELECT COUNT(E.EMPLOYEE_ID)
+			  FROM EMPLOYEES E
+			 WHERE E.DEPARTMENT_ID = D.DEPARTMENT_ID) || ')'
+  FROM DEPARTMENTS D
+;
 -- 143. 사원의 정보를 다음과 같이 조회한다. "사원번호 번 사원의 이름은 성이름 입니다."
+SELECT EMPLOYEE_ID || '번 사원의 이름은 ' || LAST_NAME || ' ' || FIRST_NAME || '입니다.'
+  FROM EMPLOYEES
+ ORDER BY EMPLOYEE_ID ASC
+;
 -- 144. 사원의 정보를 스칼라쿼리를 이용해 다음과 같이 조회한다. 
 --      "사원번호 번 사원의 상사명은 상사명 입니다."
--- 145. 사원의 정보를 조인을 이용해 다음고 같이 조회한다. "사원명 (직무명)"
+SELECT E.EMPLOYEE_ID || '번 사원의 상사명은 ' || (SELECT E_MAN.FIRST_NAME
+												FROM EMPLOYEES E_MAN
+											   WHERE E_MAN.EMPLOYEE_ID = E.MANAGER_ID) || '입니다.'
+  FROM EMPLOYEES E
+ ORDER BY EMPLOYEE_ID ASC
+;
+-- 145. 사원의 정보를 조인을 이용해 다음과 같이 조회한다. "사원명 (직무명)"
+SELECT E.FIRST_NAME || ' (' || J.JOB_TITLE || ')'
+  FROM EMPLOYEES E
+ INNER JOIN JOBS J
+    ON E.JOB_ID = J.JOB_ID
+ ORDER BY E.EMPLOYEE_ID ASC
+;
 -- 146. 사원의 정보를 스칼라쿼리를 이용해 다음과 같이 조회한다. "사원명 (직무명)"
+SELECT E.FIRST_NAME || ' (' || (SELECT J.JOB_TITLE
+								  FROM JOBS J
+								 WHERE J.JOB_ID = E.JOB_ID) || ')'
+  FROM EMPLOYEES E
+ ORDER BY E.EMPLOYEE_ID ASC
+;
 -- 147. 부서별 급여 차이(최고급여 - 최저급여)가 가장 큰 부서명을 조회한다.
 SELECT DEPARTMENT_NAME
   FROM DEPARTMENTS
@@ -2420,8 +2454,6 @@ SELECT EMPLOYEE_ID
 196    Alana
 ...
 */
-
-
 -- 151. 모든 사원들의 이름과 부서번호, 부서명을 조회한다. 근무중인 부서가 없는 경우도 조회한다.
 -- 152. 모든 사원들의 이름과 부서번호, 부서명, 근무중인 도시를 조회한다. 근무중인 부서가 없거나 근무중인 도시가 없는 경우도 조회한다.
 -- 153. 부서별로 근무중인 사원의 수를 조회한다. 근무중인 사원이 없는 부서는 0으로 조회한다.
