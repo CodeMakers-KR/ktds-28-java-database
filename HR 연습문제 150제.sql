@@ -2538,7 +2538,22 @@ SELECT EMPLOYEE_ID
  							WHERE MANAGER_ID IS NOT NULL)
 ;
 -- 150. 사원번호가 100번인 사원의 사원번호, 이름과 
---      사원번호로 내림차순 정렬된 사원의 사원번호, 이름을 조회한다.
+--      사원번호로 내림차순 정렬된 사원의 사원번호, 이름을 조회한다. (중복 제거)
+SELECT EMPLOYEE_ID
+	 , FIRST_NAME
+  FROM EMPLOYEES
+ WHERE EMPLOYEE_ID = 100
+ -- UNION 중복 제거되고 정렬 유지 안됨.
+ -- UNION ALL 중복 제거하지 않고 정렬 유지됨.
+ UNION ALL
+SELECT EMPLOYEE_ID
+	 , FIRST_NAME
+  FROM (SELECT EMPLOYEE_ID
+		     , FIRST_NAME
+		  FROM EMPLOYEES
+		 WHERE EMPLOYEE_ID != 100
+		 ORDER BY EMPLOYEE_ID DESC)
+;
 /*조회 예
 --------------------
 100    Steven
@@ -2655,17 +2670,3 @@ SELECT E.EMPLOYEE_ID
 					   ON JH.JOB_ID = PAST_J.JOB_ID) JH_D_J
 	ON JH_D_J.EMPLOYEE_ID = E.EMPLOYEE_ID
 ;
-
-
-
-
-
-
-
-
-
-
-
-
-
-
