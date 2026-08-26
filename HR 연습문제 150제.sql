@@ -419,7 +419,15 @@ SELECT TO_CHAR(HIRE_DATE, 'YYYY')
   FROM EMPLOYEES
 ;
 -- 37. MOD 함수를 통해 사원번호가 홀수면 남자, 짝수면 여자 로 구분해 조회한다. MOD(값, 나눌값)
-
+SELECT EMPLOYEE_ID
+	 , CASE MOD(EMPLOYEE_ID, 2)
+	 	   WHEN 0 THEN
+	 	   	   '여자'
+	 	   ELSE 
+	 	       '남자'
+	   END AS 성별
+  FROM EMPLOYEES
+;
 -- 38. 사원 모든 정보 중 이메일만 모두 소문자로 변경하여 조회한다.
 SELECT EMPLOYEE_ID
      , FIRST_NAME
@@ -480,11 +488,53 @@ SELECT LAST_NAME
 ;
 -- 45. 모든 사원들의 모든 정보를 조회한다. 
 --     단, 커미션을 받는 사원은 "커미션여부" 컬럼에 "Y"를, 아닌 경우 "N"으로 조회한다.
+SELECT EMPLOYEE_ID
+     , FIRST_NAME
+     , LAST_NAME
+     , EMAIL
+     , PHONE_NUMBER
+     , HIRE_DATE
+     , JOB_ID
+     , SALARY
+     , CASE
+     	   WHEN COMMISSION_PCT IS NULL THEN
+     	   	   'N'
+     	   ELSE 
+     	       'Y'
+       END AS "커미션 여부"
+     , MANAGER_ID
+     , DEPARTMENT_ID
+  FROM EMPLOYEES
+;
 -- 46. 사원의 모든 정보를 조회한다. 
 --     사원의 급여가 5000 이하이면 "사원", 
 --                7000 이하이면 "대리", 
 --                9000 이하이면 "과장", 
 --                그 외에는 "임원" 으로 조회한다.
+SELECT EMPLOYEE_ID
+     , FIRST_NAME
+     , LAST_NAME
+     , EMAIL
+     , PHONE_NUMBER
+     , HIRE_DATE
+     , JOB_ID
+     , SALARY
+     , CASE
+     	   WHEN SALARY <= 5000 THEN
+     	   	   '사원'
+     	   WHEN SALARY <= 7000 THEN
+     	   	   '대리'
+     	   WHEN SALARY <= 9000 THEN
+     	   	   '과장'
+     	   ELSE
+     	   	   '임원'
+       END AS 직급
+     , COMMISSION_PCT
+     , MANAGER_ID
+     , DEPARTMENT_ID
+  FROM EMPLOYEES
+ ORDER BY SALARY DESC
+;
 
 -- 47. 모든 사원들의 모든 정보를 급여 오름차순 정렬하여 조회한다.
 SELECT EMPLOYEE_ID
