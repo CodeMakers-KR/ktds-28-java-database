@@ -1,3 +1,33 @@
+-- UNION 규칙
+-- 집합간의 컬럼 타입이 일치해야 한다.
+SELECT 1 AS NUM
+	 , 'A' AS STR
+  FROM DUAL
+ UNION
+SELECT 2 
+     , 'B'
+     , SYSDATE
+  FROM DUAL
+;
+
+SELECT 1 AS NUM
+  FROM DUAL
+ UNION ALL
+SELECT 2
+  FROM DUAL
+ UNION ALL
+SELECT NUM2
+  FROM (SELECT -1 AS NUM2
+          FROM DUAL
+         UNION ALL
+        SELECT 0 AS NUM2
+          FROM DUAL
+         UNION ALL
+        SELECT -7 AS NUM2
+          FROM DUAL
+         ORDER BY NUM2 ASC)
+;
+
 SELECT MOD(10, 3)
 	 , MOD(10, 2)
   FROM DUAL
