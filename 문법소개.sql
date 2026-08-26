@@ -1,3 +1,66 @@
+-- CASE WHEN ELSE END
+-- 비교 연산. (if ~ else if ~ else)
+WITH TEMP AS (
+	SELECT 'Y' AS FLAG
+	  FROM DUAL
+	 UNION
+	SELECT 'N'
+	  FROM DUAL
+	 UNION
+	SELECT 'R'
+	  FROM DUAL
+	 UNION
+	SELECT NULL
+	  FROM DUAL
+)
+-- TEMP 테이블의 FLAG  컬럼의 값이 
+--   'Y' 라면 "On" 으로 조회하고, 
+--   'R' 이라면 "Ready"로 조회하고,
+--   NULL 이라면 "Error"로 조회하고,
+--   아니라면 "Off"로 조회한다.
+SELECT FLAG
+	 , CASE -- FLAG
+	       WHEN FLAG = 'Y' THEN
+	           'On'
+	       WHEN FLAG = 'R' THEN
+	       	   'Ready'
+	       WHEN FLAG IS NULL THEN
+	       	   'Error'
+	       ELSE
+	           'Off'
+	   END AS ON_OFF
+  FROM TEMP
+;
+
+WITH NUMBERS AS (
+	SELECT 10 AS NUM
+	  FROM DUAL
+	 UNION
+	SELECT 20
+	  FROM DUAL
+	 UNION
+	SELECT 30
+	  FROM DUAL
+)
+-- NUM 값이 30이상이면 "3", 20이상이면 "2", 10이상이면 "1", 아니면 "0" 으로 조회한다.
+SELECT NUM
+	 , CASE
+	       WHEN NUM >= 30 THEN
+	           '3'
+	       WHEN NUM >= 20 THEN
+	       	   '2'
+	       WHEN NUM >= 10 THEN
+	           '1'
+	       ELSE 
+	       	   '0'
+	   END AS RESULT
+  FROM NUMBERS
+;
+-- 1. 사원의 사원 번호, 부서 번호, 근무 현황을 조회한다.
+--       근무 현황: 근무하는 부서가 있을 경우 "근무 중", 아닐 경우 "발령 대기"
+-- 2. 사원의 사원 번호, 입사일, 입사 순서를 조회한다.
+--       입사 순서: 가장 빨리 입사한 사원은 "원년 사원", 가장 늦게 입사한 사원은 "신규 사원", 아닐 경우 "사원"
+
 -- LPAD, RPAD
 SELECT 'A' AS LETTER
 	 , 10 AS NUM
