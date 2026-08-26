@@ -58,8 +58,52 @@ SELECT NUM
 ;
 -- 1. 사원의 사원 번호, 부서 번호, 근무 현황을 조회한다.
 --       근무 현황: 근무하는 부서가 있을 경우 "근무 중", 아닐 경우 "발령 대기"
+SELECT EMPLOYEE_ID
+	 , DEPARTMENT_ID
+	 , CASE
+	       WHEN DEPARTMENT_ID IS NULL THEN
+	       	   '발령 대기'
+	       ELSE
+	           '근무 중'
+	   END AS "근무 현황"
+  FROM EMPLOYEES
+;
 -- 2. 사원의 사원 번호, 입사일, 입사 순서를 조회한다.
 --       입사 순서: 가장 빨리 입사한 사원은 "원년 사원", 가장 늦게 입사한 사원은 "신규 사원", 아닐 경우 "사원"
+SELECT EMPLOYEE_ID
+	 , HIRE_DATE
+	 , CASE HIRE_DATE
+	       WHEN (SELECT MAX(HIRE_DATE)
+	       		   FROM EMPLOYEES) THEN
+	       	   '원년 사원'
+	   	   WHEN (SELECT MIN(HIRE_DATE)
+	   	   		   FROM EMPLOYEES) THEN
+	   	   	   '신규 사원'
+	   	   ELSE
+	   	   	   '사원'
+	   END AS "입사 순서"
+  FROM EMPLOYEES
+;
+
+WITH DATES AS (
+	SELECT MAX(HIRE_DATE) AS MAX_HIRE_DATE
+		 , MIN(HIRE_DATE) AS MIN_HIRE_DATE
+	  FROM EMPLOYEES
+)
+SELECT EMPLOYEE_ID
+	 , HIRE_DATE
+	 , CASE HIRE_DATE
+	       WHEN (SELECT MIN_HIRE_DATE
+	       		   FROM DATES) THEN
+	       	   '원년 사원'
+	   	   WHEN (SELECT MAX_HIRE_DATE
+	   	   		   FROM DATES) THEN
+	   	   	   '신규 사원'
+	   	   ELSE
+	   	   	   '사원'
+	   END AS "입사 순서"
+  FROM EMPLOYEES
+;
 
 -- LPAD, RPAD
 SELECT 'A' AS LETTER
