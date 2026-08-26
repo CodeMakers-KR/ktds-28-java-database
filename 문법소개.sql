@@ -1,3 +1,28 @@
+-- LPAD, RPAD
+SELECT 'A' AS LETTER
+	 , 10 AS NUM
+	 , LPAD('A', 10, '1')
+	 , LPAD(10, 10, '-')
+	 , RPAD('A', 10, '1')
+	 , RPAD(10, 10, '-')
+	 , 'ABCDEFGHIJKLMNOP' -- 16자리
+	 , LPAD('ABCDEFGHIJKLMNOP', 10, '!')
+	 , RPAD('ABCDEFGHIJKLMNOP', 10, '!')
+	 , 'ABCDEFGHIJ' -- 10자리
+	 , LPAD('ABCDEFGHIJ', 10, '@')
+	 , RPAD('ABCDEFGHIJ', 10, '@')
+  FROM DUAL
+;
+
+-- 2000, 4000, 13000, 6000
+SELECT EMPLOYEE_ID
+	 , SALARY
+	 , SALARY / 1000
+	 , TRUNC(SALARY / 1000)
+	 , TRUNC(SALARY / 1000) * 1000
+  FROM EMPLOYEES
+;
+
 -- OUTER JOIN
 -- 모든 사원들의 이름과 부서의 이름을 조회한다.
 --   근무중인 부서가 없다면 null로 조회한다.

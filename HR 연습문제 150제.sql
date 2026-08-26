@@ -419,15 +419,65 @@ SELECT TO_CHAR(HIRE_DATE, 'YYYY')
   FROM EMPLOYEES
 ;
 -- 37. MOD 함수를 통해 사원번호가 홀수면 남자, 짝수면 여자 로 구분해 조회한다. MOD(값, 나눌값)
+
 -- 38. 사원 모든 정보 중 이메일만 모두 소문자로 변경하여 조회한다.
+SELECT EMPLOYEE_ID
+     , FIRST_NAME
+     , LAST_NAME
+     , LOWER(EMAIL)
+     , PHONE_NUMBER
+     , HIRE_DATE
+     , JOB_ID
+     , SALARY
+     , COMMISSION_PCT
+     , MANAGER_ID
+     , DEPARTMENT_ID
+  FROM EMPLOYEES
+;
 -- 39. 사원의 급여를 TRUNC(소수점 버림) 함수를 사용해 100 단위는 버린채 다음과 같이 조회한다. 
 --     예> 3700 -> 3000, 12700 -> 12000
+SELECT EMPLOYEE_ID
+	 , TRUNC(SALARY / 1000) * 1000 AS SALARY
+  FROM EMPLOYEES
+;
 -- 40. 100단위를 버린 사원의 급여 별 사원의 수를 조회한다.
+SELECT SALARY
+	 , COUNT(EMPLOYEE_ID)
+  FROM (SELECT EMPLOYEE_ID
+			 , TRUNC(SALARY / 1000) * 1000 AS SALARY
+		  FROM EMPLOYEES)
+ GROUP BY SALARY
+ ORDER BY SALARY ASC
+;
 -- 41. 모든 사원들의 이름을 10자리로 맞추어 조회한다.
+SELECT FIRST_NAME
+	 , LENGTH(FIRST_NAME)
+	 , LPAD(FIRST_NAME, 10, ' ')
+	 , LENGTH(LPAD(FIRST_NAME, 10, ' '))
+  FROM EMPLOYEES
+;
 -- 42. 사원의 이름과 성을 이용해 EMAIL과 같은 값으로 만들어 조회한다.
 --  FIRST_NAME에서 첫 번째 글자 1개, LAST_NAME에서 첫 번째 부터 7개 ==> 총 8자리.
+SELECT FIRST_NAME
+	 , LAST_NAME
+	 , EMAIL
+	 , SUBSTR(FIRST_NAME, 1, 1) || UPPER(SUBSTR(LAST_NAME, 1, 7))
+  FROM EMPLOYEES
+;
 -- 43. 모든 사원들의 이름을 10자리로 변환해 조회한다. 예> 이름 => "        이름"
+SELECT FIRST_NAME
+	 , LENGTH(FIRST_NAME)
+	 , LPAD(FIRST_NAME, 10, ' ')
+	 , LENGTH(LPAD(FIRST_NAME, 10, ' '))
+  FROM EMPLOYEES
+;
 -- 44. 모든 사원들의 성을 10자리로 변환해 조회한다. 예> 성 => "성         "
+SELECT LAST_NAME
+	 , LENGTH(LAST_NAME)
+	 , RPAD(LAST_NAME, 10, ' ')
+	 , LENGTH(RPAD(LAST_NAME, 10, ' '))
+  FROM EMPLOYEES
+;
 -- 45. 모든 사원들의 모든 정보를 조회한다. 
 --     단, 커미션을 받는 사원은 "커미션여부" 컬럼에 "Y"를, 아닌 경우 "N"으로 조회한다.
 -- 46. 사원의 모든 정보를 조회한다. 
